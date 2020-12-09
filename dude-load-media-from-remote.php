@@ -17,9 +17,25 @@ namespace Dude_Load_Media_From_Remote;
 
 // Run the plugin only in staging or development environments when the REMOTE_MEDIA_URL is defined
 if ( getenv( 'WP_ENV' ) && ( 'staging' === getenv( 'WP_ENV') || 'development' === getenv( 'WP_ENV' ) ) && getenv( 'REMOTE_MEDIA_URL' ) ) {
-  add_filter( 'wp_get_attachment_image_src', __NAMESPACE__ . '\maybe_load_media_from_remote', 999, 3 );
+  add_filter( 'wp_get_attachment_url', __NAMESPACE__ . '\maybe_load_media_from_remote', 999, 2 );
   add_filter( 'wp_prepare_attachment_for_js', __NAMESPACE__ . '\maybe_load_remote_media_file_for_js', 999, 2 );
+}
 
+/**
+ * Check if media file exists, if not, then try to load it from remote
+ *
+ * @param string $url URL for the given attachment
+ * @param Int $attachment_id Attachment ID
+ */
+function maybe_load_media_from_remote( $url, $attachment_id ) {
+  if ( attached_file_exists( $attachment_id ) ) {
+    return $image;
+  }
+
+  if ( ! empty( $url ) ) {
+    $url = try_to_load_image_from_remote( $url );
+  }
+  return $url;
 }
 
 /**
@@ -45,23 +61,6 @@ function maybe_load_remote_media_file_for_js( $response, $attachment ) {
   }
 
   return $response;
-}
-
-/**
- * Check if media file exists, if not, then try to load it from remote
- *
- * @param Array $image Image data
- * @param Int $attachment_id Attachment ID
- */
-function maybe_load_media_from_remote( $image, $attachment_id ) {
-  if ( attached_file_exists( $attachment_id ) ) {
-    return $image;
-  }
-
-  if ( isset( $image[0]) && ! empty( $image[0] ) ) {
-    $image[0] = try_to_load_image_from_remote( $image[0] );
-  }
-  return $image;
 }
 
 /**
