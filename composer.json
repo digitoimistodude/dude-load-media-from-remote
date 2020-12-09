@@ -1,0 +1,27 @@
+{
+  "name": "digitoimistodude/dude-load-media-from-remote",
+  "type": "wordpress-plugin",
+  "description": "A WordPress plugin that tries to load images from remote url if file is not present in local environment.",
+  "homepage": "https://github.com/digitoimistodude/dude-load-media-from-remote",
+  "keywords": [
+    "wordpress",
+    "plugin"
+  ],
+  "license": "GPL-3.0+",
+  "version": "0.1.0",
+  "authors": [{
+    "name": "Timi Wahalahti",
+    "email": "timi@dude.fi",
+    "homepage": "https://github.com/timiwahalahti"
+  },
+  {
+    "name": "Roni Laukkarinen",
+    "email": "roni@dude.fi",
+    "homepage": "https://github.com/ronilaukkarinen"
+  },
+  {
+    "name": "Niku Hietanen",
+    "email": "niku@dude.fi",
+    "homepage": "https://github.com/niq1982"
+  }]
+}
