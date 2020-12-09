@@ -21,6 +21,7 @@ if ( getenv( 'WP_ENV' ) && ( 'staging' === getenv( 'WP_ENV' ) || 'development' =
   add_filter( 'wp_get_attachment_url', __NAMESPACE__ . '\maybe_load_media_from_remote', 999, 2 );
   add_filter( 'wp_prepare_attachment_for_js', __NAMESPACE__ . '\maybe_load_remote_media_file_for_js', 999, 2 );
   add_filter( 'wp_calculate_image_srcset', __NAMESPACE__ . '\maybe_load_media_remote_for_srcset', 999, 5 );
+  add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\highlight_remote_media' );
 }
 
 /**
@@ -164,3 +165,25 @@ function url_exists( $url ) {
   $headers = @get_headers( $url );
   return is_array( $headers ) ? preg_match( '/^HTTP\\/\\d+\\.\\d+\\s+2\\d\\d\\s+.*$/', $headers[0] ) : false;
 } // end url_exists
+
+/**
+ * Highlight remote media files in media browser
+ */
+function highlight_remote_media() {
+  wp_register_style( 'dude-load-media-from-remote', false );
+  $style = '
+  .attachment-preview img[src*="' . esc_attr( getenv( 'REMOTE_MEDIA_URL' ) ) . '"] {
+    outline: 3px solid orange;
+    outline-offset: -3px;
+  }
+  .attachments-browser:after {
+    display: inline-block;
+    content: "Remote media files from ' . esc_attr( getenv( 'REMOTE_MEDIA_URL' ) ) . '";
+    padding: 2px 5px;
+    border: 3px solid orange;
+    background: white;
+  }
+  ';
+  wp_add_inline_style( 'dude-load-media-from-remote', $style );
+  wp_enqueue_style( 'dude-load-media-from-remote' );
+}
