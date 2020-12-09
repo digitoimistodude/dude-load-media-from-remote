@@ -103,7 +103,7 @@ function maybe_load_media_remote_for_srcset( $sources, $size_array, $image_src, 
   }
 
   foreach ( $sources as $key => $source ) {
-    $sources[ $key ] = try_to_load_image_from_remote( $source['url'] );
+    $sources[ $key ]['url'] = try_to_load_image_from_remote( $source['url'] );
   }
 
   return $sources;
