@@ -17,7 +17,7 @@ namespace Dude_Load_Media_From_Remote;
 
 // Run the plugin only in staging or development environments when the REMOTE_MEDIA_URL is defined
 if ( getenv( 'WP_ENV' ) && ( 'staging' === getenv( 'WP_ENV') || 'development' === getenv( 'WP_ENV' ) ) && getenv( 'REMOTE_MEDIA_URL' ) ) {
-  add_filter( 'wp_get_attachment_image_src', __NAMESPACE__ . '\maybe_load_media_from_staging', 999, 3 );
+  add_filter( 'wp_get_attachment_image_src', __NAMESPACE__ . '\maybe_load_media_from_remote', 999, 3 );
   add_filter( 'wp_prepare_attachment_for_js', __NAMESPACE__ . '\maybe_load_remote_media_file_for_js', 999, 2 );
 
 }
@@ -34,14 +34,14 @@ function maybe_load_remote_media_file_for_js( $response, $attachment ) {
     return $response;
   }
 
-  if ( isset($response['url']) ) {
-      $response['url'] = try_to_load_image_from_remote($response['url']);
+  if ( isset( $response['url'] ) ) {
+    $response['url'] = try_to_load_image_from_remote($response['url']);
   }
 
-  if (is_array($response['sizes']) && count($response['sizes'])) {
-      foreach ($response['sizes'] as &$size) {
-          $size['url'] = try_to_load_image_from_remote($size['url']);
-      }
+  if ( isset( $response['sizes'] ) && is_array( $response['sizes'] ) && count( $response['sizes'] ) ) {
+    foreach ( $response['sizes'] as &$size ) {
+      $size['url'] = try_to_load_image_from_remote( $size['url'] );
+    }
   }
 
   return $response;
