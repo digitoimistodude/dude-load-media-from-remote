@@ -25,23 +25,6 @@ if ( getenv( 'WP_ENV' ) && ( 'staging' === getenv( 'WP_ENV' ) || 'development' =
 }
 
 /**
- * Check if media file exists, if not, then try to load it from remote
- *
- * @param string $url URL for the given attachment
- * @param Int $attachment_id Attachment ID
- */
-function maybe_load_media_from_remote( $url, $attachment_id ) {
-  if ( attached_file_exists( $attachment_id ) ) {
-    return $image;
-  }
-
-  if ( ! empty( $url ) ) {
-    $url = try_to_load_image_from_remote( $url );
-  }
-  return $url;
-}
-
-/**
  * Load remote file for JS response
  *
  * @param   array  $response   Response data
