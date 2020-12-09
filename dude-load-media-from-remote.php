@@ -117,7 +117,7 @@ function maybe_load_media_remote_for_srcset( $sources, $size_array, $image_src, 
  */
 function try_to_load_image_from_remote( $local_media_url ) {
   $remote_media_url = str_replace( getenv( 'WP_HOME' ), getenv( 'REMOTE_MEDIA_URL' ), $local_media_url );
-  if ( url_exists( $remote_media_url ) ) {
+  if ( ! empty( $remote_media_url ) ) {
     return $remote_media_url;
   }
 
@@ -140,16 +140,6 @@ function attached_file_exists( $id ) {
 } // end attached_file_exists
 
 /**
- * Check if url exists from it's headers
- * @param  string $url URL to check
- * @return boolean     Does the url exists
- */
-function url_exists( $url ) {
-  $headers = @get_headers( $url );
-  return is_array( $headers ) ? preg_match( '/^HTTP\\/\\d+\\.\\d+\\s+2\\d\\d\\s+.*$/', $headers[0] ) : false;
-} // end url_exists
-
-/**
  * Highlight remote media files in media browser
  */
 function highlight_remote_media() {
@@ -160,7 +150,10 @@ function highlight_remote_media() {
     outline-offset: -3px;
   }
   .attachments-browser:after {
-    display: inline-block;
+    display: block;
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
     content: "Remote media files from ' . esc_attr( getenv( 'REMOTE_MEDIA_URL' ) ) . '";
     padding: 2px 5px;
     border: 3px solid orange;
