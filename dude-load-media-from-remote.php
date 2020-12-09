@@ -78,7 +78,7 @@ function maybe_load_media_from_remote( $image, $attachment_id ) {
  *                                  pixel density value if paired with an 'x' descriptor.
  *     }
  * }
- * @param array $size_array     {
+ * @param array  $size_array     {
  *     An array of requested width and height values.
  *
  *     @type int $0 The width in pixels.
@@ -100,11 +100,11 @@ function maybe_load_media_remote_for_srcset( $sources, $size_array, $image_src, 
   }
 
   foreach ( $sources as $key => $source ) {
-    $sources[ $key ] = try_to_load_image_from_remote($source['url']);
+    $sources[ $key ] = try_to_load_image_from_remote( $source['url'] );
   }
 
   return $sources;
-}
+} // end maybe_load_media_remote_for_srcset
 
 /**
  * Try to load image from remote
