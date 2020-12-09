@@ -19,6 +19,7 @@ namespace Dude_Load_Media_From_Remote;
 
 if ( getenv( 'WP_ENV' ) && ( 'staging' === getenv( 'WP_ENV' ) || 'development' === getenv( 'WP_ENV' ) ) && getenv( 'REMOTE_MEDIA_URL' ) ) {
   add_filter( 'wp_get_attachment_url', __NAMESPACE__ . '\maybe_load_media_from_remote', 999, 2 );
+  add_filter( 'wp_get_attachment_image_src  ', __NAMESPACE__ . '\maybe_load_media_from_remote', 999, 2 );
   add_filter( 'wp_prepare_attachment_for_js', __NAMESPACE__ . '\maybe_load_remote_media_file_for_js', 999, 2 );
   add_filter( 'wp_calculate_image_srcset', __NAMESPACE__ . '\maybe_load_media_remote_for_srcset', 999, 5 );
   add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\highlight_remote_media' );
@@ -60,8 +61,11 @@ function maybe_load_media_from_remote( $image, $attachment_id ) {
     return $image;
   }
 
-  if ( isset( $image[0] ) && ! empty( $image[0] ) ) {
+  // Check if image is array or a string and assing url to it
+  if ( is_array( $image ) && isset( $image[0] ) && ! empty( $image[0] ) ) {
     $image[0] = try_to_load_image_from_remote( $image[0] );
+  } elseif ( ! empty( $image ) ) {
+    $image = try_to_load_image_from_remote( $image );
   }
 
   return $image;
@@ -116,7 +120,9 @@ function maybe_load_media_remote_for_srcset( $sources, $size_array, $image_src, 
  * @return string                   Either the remote media url if it exists or local url as fallback
  */
 function try_to_load_image_from_remote( $local_media_url ) {
-  $remote_media_url = str_replace( getenv( 'WP_HOME' ), getenv( 'REMOTE_MEDIA_URL' ), $local_media_url );
+  $local_url = getenv( 'WP_HOME' );
+  $remote_url = getenv( 'REMOTE_MEDIA_URL' );
+  $remote_media_url = str_replace( $local_url, $remote_url, $local_media_url );
   if ( ! empty( $remote_media_url ) ) {
     return $remote_media_url;
   }
