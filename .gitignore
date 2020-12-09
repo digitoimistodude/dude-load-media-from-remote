@@ -1,0 +1,28 @@
+# Dotfiles and directories
+.DS_Store
+.env
+.env*
+!.env.example
+.htaccess
+.vagrant
+.sass-cache/
+.git/
+.DS_Store
+composer.lock
+.vscode/
+
+# Logs
+package-lock.json
+access.log
+error.log
+log/
+
+# Special git hooks
+!.githooks
+!.githooks/*
+
+# Composer and npm
+vendor/
+vendor/*
+!vendor/.gitkeep
+node_modules/
