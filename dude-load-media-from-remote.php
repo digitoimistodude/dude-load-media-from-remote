@@ -124,7 +124,7 @@ function try_to_load_image_from_remote( $local_media_url ) {
   $remote_url = getenv( 'REMOTE_MEDIA_URL' );
   $remote_media_url = str_replace( $local_url, $remote_url, $local_media_url );
   if ( ! empty( $remote_media_url ) ) {
-    return $remote_media_url;
+    return apply_filters( 'dude_remote_media_url', $remote_media_url );
   }
 
   return $local_media_url;
