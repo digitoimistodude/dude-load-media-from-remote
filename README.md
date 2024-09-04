@@ -26,7 +26,7 @@ Then add to require-dev in your composer.json:
 Then modify `.env` file and add:
 
 ```bash
-REMOTE_MEDIA_URL=production.fi
+REMOTE_MEDIA_URL=https://production.fi
 ```
 
 Run:
